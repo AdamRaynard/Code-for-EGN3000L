@@ -1,0 +1,94 @@
+#define IR_SR 11; //sets IR Sensor to pin 11   
+#define IR_SL 12; //sets IR sensor to pin 12
+#define MS 200; //sets how fast motors will go 
+
+
+int enableRightMotor = 6; // sets rightmotor enable to pin 6  
+int rightMotorPin1 = 7; //sets rightmotor pin 1 to pin 7
+int rightMotorPin2 = 8; // sets rightmotor pin 2 to pin 8
+
+
+int enableLeftMotor = 5; //sets leftmotor enable to pin 5
+int leftMotorPin1 = 9; //sets leftmotor pin 1 to pin 9
+int leftMotorPin2 = 10; //stes leftmotor pin 2 to pin 10
+
+void setup()
+{
+
+
+  pinMode(enableRightMotor, OUTPUT); //sets pimode for right motor enable to be an output
+  pinMode(rightMotorPin1, OUTPUT); // sets rightmotor pin 1 to be an output
+  pinMode(rightMotorPin2, OUTPUT); // sets rightmotor pin 2 to be an output
+
+  pinMode(enableLeftMotor, OUTPUT); // sets left motor enable to be an output
+  pinMode(leftMotorPin1, OUTPUT); // sets left motor pin 1 to be an output
+  pinMode(leftMotorPin2, OUTPUT); // sets left motor pin 2 to be an output
+
+  pinMode(IR_SR, INPUT); // sets IR sensor right to be an input
+  pinMode(IR_SL, INPUT); // sets IR sensor left to ba an input
+  rotateMotor(0, 0); // clears motor rotations so that motors dont move without inputs
+}
+
+
+void loop()
+{
+
+  int RIRSV = digitalRead(IR_SR); // creates a new variable Right IR sensor value
+  int LIRSV = digitalRead(IR_SL); // creates a new variable Left IR sensor value
+
+  if (RIRSV == LOW && LIRSV == LOW) // checks to see vaules of Both IR sensors and compares them
+  {
+    rotateMotor(100, 100); //sets rate and diretion motors need to move
+  }
+  else if (RIRSV == HIGH && LIRSV == LOW ) // checks to see vaules of Both IR sensors and compares them
+  
+  {
+    rotateMotor(-100, 100); //sets rate and diretion motors need to move
+  }
+  else if (RIRSV == LOW && LIRSV == HIGH ) // checks to see vaules of Both IR sensors and compares them
+  
+  {
+    rotateMotor(100, -100); //sets rate and diretion motors need to move
+  }
+  else // if nothing is read nothing is done
+    rotateMotor(0, 0); //sets rate and diretion motors need to move
+  }
+}
+
+
+void rotateMotor(int rightMS, int leftMS) 
+{
+
+  if (rightMS < 0)
+  {
+    digitalWrite(rightMotorPin1, LOW);
+    digitalWrite(rightMotorPin2, HIGH);
+  }
+  else if (rightMS > 0)
+  {
+    digitalWrite(rightMotorPin1, HIGH);
+    digitalWrite(rightMotorPin2, LOW);
+  }
+  else
+  {
+    digitalWrite(rightMotorPin1, LOW);
+    digitalWrite(rightMotorPin2, LOW);
+  }
+
+  if (leftMS < 0)
+  {
+    digitalWrite(leftMotorPin1, LOW);
+    digitalWrite(leftMotorPin2, HIGH);
+  }
+  else if (leftMS > 0)
+  {
+    digitalWrite(leftMotorPin1, HIGH);
+    digitalWrite(leftMotorPin2, LOW);
+  }
+  else
+  {
+    digitalWrite(leftMotorPin1, LOW);
+    digitalWrite(leftMotorPin2, LOW);
+  }
+  analogWrite(enableRightMotor, abs(rightMS));
+  analogWrite(enableLeftMotor, abs(leftMS));
